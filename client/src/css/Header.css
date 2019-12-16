@@ -1,0 +1,17 @@
+.left {
+    position:absolute;
+    left:10px;
+}
+
+.right {
+    position: relative;
+    right: 0;
+}
+
+.stylenav {    
+    background-color: #333;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    width: 100%;
+}

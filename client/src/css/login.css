@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css?family=Overpass&display=swap');
+
+body, html {
+    height:100%
+}
+
+.login-form {
+    padding-left: 40px;
+    padding-right: 40px;
+    vertical-align: center;
+}
+
+.login-form-hide {
+    display:none;
+}
+
+.register-form {    
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.register-form-hide {
+    display:none;
+    /* max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s ease-out; */
+}
+
+.switch-layout-btn {
+    position:absolute;
+    bottom: 10%;
+    right: 9%;
+    margin-left: 5%;
+    width: 100;
+}
+
+.switch-layout-btn-span {
+    text-decoration: underline;
+    color: blue;
+}
+
+.switch-layout-btn-span:hover{
+    cursor: pointer;
+}
+
+.section-left {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.section-left .section-head {
+    width: 50%;
+    text-align: center;
+    position: absolute;
+    font-size: 30px;
+    font-weight: bolder;
+    color: white;
+    position: absolute;
+    top: 10%;
+}
+
+.section-left .section-info {
+    width: 50%;
+    text-align: center;
+    position: absolute;
+    font-weight: bolder;
+    color: white;
+    position: absolute;
+    top: 20%;
+}
+
+.section-back-img {
+    height: 100vh;
+    width: 100%;
+}
+
+.section-right {
+    margin-left: 50%;
+    width: 50%;
+    height: 100vh;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.wrapper {
+    height: 100%;
+    /* border: 3px solid black; */
+    border-radius: 25px;
+    background-color: white;
+}
+
+.section-right .head {
+    padding-top: 20px;
+    text-align: center;
+    font-size: xx-large;
+    font-family: 'Overpass', sans-serif;
+    color: black;
+    font-weight: bolder;
+}
+
+.section-right .login-form {
+    margin: 5px;
+    border-radius: 20px;
+}
+
+
+.section-right .register-form {
+    margin: 5px;
+    border-radius: 20px;
+}
+
+
+.subsection-header {
+    margin-top:20px;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.subsection-submit {
+    border-radius: 25px;
+    width:140px;
+    color: white;
+}
+
+.subsection-submit:active {
+    background-color: black
+}
+
+
+.float-right {
+    float: right;
+}
+
+.register-btn {
+    margin: 20px;
+    text-align: center;
+}
+
+
+/* Copied from https://stackoverflow.com/questions/38301774/how-to-do-floating-of-labels-in-css */
+.floating-label {
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-input {
+    font-size: 14px;
+    padding: 4px 4px;
+    display: block;
+    width: 100%;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #757575;
+}
+
+label {
+    color: #999;
+    font-size: 14px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.floating-input:focus~label,
+.floating-input:not(:placeholder-shown)~label {
+    top: -8px;
+    font-size: 15px;
+}
+
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.hb {
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin-bottom: 16%;
+    margin-left: 4%;
+}
+
+.hb-wrapper {
+    position: absolute;
+    align-items: center;
+    padding: 10px;
+    bottom:30px;
+}
+
+.hb span {
+    background: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+}

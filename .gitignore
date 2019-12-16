@@ -1,0 +1,4 @@
+node_modules
+config/keyConfig.js
+logs
+*.log
