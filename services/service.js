@@ -40,6 +40,7 @@ const web3 = new Web3(
 const xdc3 = new XDC3(
   new XDC3.providers.HttpProvider("http://rpc.apothem.network")
 );
+
 const contractInstWeb3 = new web3.eth.Contract(
   contractConfig.acceptToken_abi,
   "0x" + contractConfig.acceptToken_addr.slice(3)

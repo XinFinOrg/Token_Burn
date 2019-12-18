@@ -51,6 +51,21 @@ class MerchantDashboard extends Component {
       return;
     }
     owner = filterAddress(owner);
+    if (web3 == null) {
+      return store.addNotification({
+        title: "Error!",
+        message: "Window has no web3 provider, cannot make request",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+      });
+    }
     if (!web3.utils.isAddress(owner)) {
       store.addNotification({
         title: "Invalid Input",
@@ -177,6 +192,21 @@ class MerchantDashboard extends Component {
         }
       });
     } else {
+      if (contractInst == null) {
+        return store.addNotification({
+          title: "Error!",
+          message: "Window has no web3 provider, cannot make request",
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animated", "fadeIn"],
+          animationOut: ["animated", "fadeOut"],
+          dismiss: {
+            duration: 3000,
+            onScreen: true
+          }
+        });
+      }
       const encodedData = contractInst.methods
         .enableBurning(this.state.currentShopId)
         .encodeABI();
@@ -204,6 +234,21 @@ class MerchantDashboard extends Component {
         }
       });
     } else {
+      if (contractInst == null) {
+        return store.addNotification({
+          title: "Error!",
+          message: "Window has no web3 provider, cannot make request",
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animated", "fadeIn"],
+          animationOut: ["animated", "fadeOut"],
+          dismiss: {
+            duration: 3000,
+            onScreen: true
+          }
+        });
+      }
       const encodedData = contractInst.methods
         .disableBurning(this.state.currentShopId)
         .encodeABI();
@@ -215,6 +260,21 @@ class MerchantDashboard extends Component {
   };
 
   setBurnPercent = async () => {
+    if (contractInst == null) {
+      return store.addNotification({
+        title: "Error!",
+        message: "Window has no web3 provider, cannot make request",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+      });
+    }
     const burnPercentStr = $("#ub_burnPercent")
       .val()
       .toString();
@@ -231,6 +291,19 @@ class MerchantDashboard extends Component {
   checkOwner = async () => {
     if (web3 == null) {
       //ask to install teh web extn
+      return store.addNotification({
+        title: "Error!",
+        message: "Window has no web3 provider, cannot make request",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+      });
     }
     const acnts = await web3.eth.getAccounts();
     if (_.isEmpty(acnts)) {
@@ -276,6 +349,21 @@ class MerchantDashboard extends Component {
 
   getMerchantData = id => {
     console.log("called getMerchantData, id: ", id);
+    if (contractInst == null) {
+      return store.addNotification({
+        title: "Error!",
+        message: "Window has no web3 provider, cannot make request",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+      });
+    }
     contractInst.methods.getMerchantData(id).call((err, result) => {
       if (err) throw err;
       let resArr = [];
@@ -316,6 +404,25 @@ class MerchantDashboard extends Component {
 
   componentDidMount() {
     console.log("Called componentDidMount");
+    if (window.web3 == undefined || window.web3 == null) {
+      if (web3 == null) {
+        //ask to install teh web extn
+        return store.addNotification({
+          title: "Error!",
+          message: "Window has no web3 provider, cannot make request",
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animated", "fadeIn"],
+          animationOut: ["animated", "fadeOut"],
+          dismiss: {
+            duration: 3000,
+            onScreen: true
+          }
+        });
+      }
+    }
+
     web3 = new Web3(window.web3.currentProvider);
     contractInst = new web3.eth.Contract(
       apothem.acceptToken_abi,
@@ -324,6 +431,7 @@ class MerchantDashboard extends Component {
     contractInst.methods.owner.call((err, result) => {
       console.log(err, result);
     });
+
     // web3.eth.getAccounts().then(result => {
     //   web3.eth.sendTransaction(
     //     { from: result[0], to: result[0], value: 1000000 },
@@ -485,230 +593,230 @@ class MerchantDashboard extends Component {
     return (
       <div>
         <Header />
-        <div className="container" >
-        <div className="tab">
-          <button
-            id="btn-admins"
-            className="tablinks"
-            onClick={event => openTab(event, "newShop")}
-          >
-            New Merchant
-          </button>
-          <button
-            id="btn-admins"
-            className="tablinks"
-            onClick={event => openTab(event, "funcs")}
-          >
-            Functionalities
-          </button>
-          <button
-            id="btn-admins"
-            className="tablinks"
-            onClick={event => openTab(event, "scripts")}
-          >
-            Script
-          </button>
-          <button
-            id="btn-allApps"
-            className="tablinks"
-            onClick={event => openTab(event, "explorer")}
-          >
-            Explorer
-          </button>
-        </div>
-        <div id="newShop" className="tabcontent">
-          <section>
-            <h4>Register New Shop</h4>
-            <div className="floating-label">
-              <input
-                type="text"
-                id="owner"
-                className="floating-input"
-                placeholder=" "
-              />
-              <label>Owner Address</label>
-            </div>
-
-            <div className="floating-label">
-              <input
-                type="text"
-                id="merchantName"
-                className="floating-input"
-                placeholder=" "
-              />
-              <label>Merchant Name</label>
-            </div>
-
-            <div className="floating-label">
-              <input
-                type="number"
-                id="burnPercent"
-                step="0.01"
-                className="floating-input"
-                placeholder=" "
-              />
-              <label>Burn Percent</label>
-            </div>
-
+        <div className="container">
+          <div className="tab">
             <button
-              onClick={this.registerMerchant}
-              className="btn btn-primary "
+              id="btn-admins"
+              className="tablinks"
+              onClick={event => openTab(event, "newShop")}
             >
-              Submit
+              New Merchant
             </button>
-          </section>
-        </div>
-        <div id="funcs" className="tabcontent">
-          <div className="head-wrapper">
-            <div>
-              {this.props.shops ? (
-                <div className="dropdown-wrapper">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      {this.state.currentShopName}
-                    </Dropdown.Toggle>
+            <button
+              id="btn-admins"
+              className="tablinks"
+              onClick={event => openTab(event, "funcs")}
+            >
+              Functionalities
+            </button>
+            <button
+              id="btn-admins"
+              className="tablinks"
+              onClick={event => openTab(event, "scripts")}
+            >
+              Script
+            </button>
+            <button
+              id="btn-allApps"
+              className="tablinks"
+              onClick={event => openTab(event, "explorer")}
+            >
+              Explorer
+            </button>
+          </div>
+          <div id="newShop" className="tabcontent">
+            <section>
+              <h4>Register New Shop</h4>
+              <div className="floating-label">
+                <input
+                  type="text"
+                  id="owner"
+                  className="floating-input"
+                  placeholder=" "
+                />
+                <label>Owner Address</label>
+              </div>
 
-                    <Dropdown.Menu>
-                      {this.getDropDownOptions(this.props)}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
+              <div className="floating-label">
+                <input
+                  type="text"
+                  id="merchantName"
+                  className="floating-input"
+                  placeholder=" "
+                />
+                <label>Merchant Name</label>
+              </div>
+
+              <div className="floating-label">
+                <input
+                  type="number"
+                  id="burnPercent"
+                  step="0.01"
+                  className="floating-input"
+                  placeholder=" "
+                />
+                <label>Burn Percent</label>
+              </div>
+
+              <button
+                onClick={this.registerMerchant}
+                className="btn btn-primary "
+              >
+                Submit
+              </button>
+            </section>
+          </div>
+          <div id="funcs" className="tabcontent">
+            <div className="head-wrapper">
+              <div>
+                {this.props.shops ? (
+                  <div className="dropdown-wrapper">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {this.state.currentShopName}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        {this.getDropDownOptions(this.props)}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="dropdown-message">
+                {this.state.currentShopName == "select a shop"
+                  ? "Welcome Merchant, Please select your shop"
+                  : `Your Merchant ID is ${this.state.currentShopId}`}
+              </div>
+            </div>
+            <div>
+              {this.props.shops && this.props.shops.shops.length > 0 ? (
+                this.state.currentShopId == "select a shop" ? (
+                  ""
+                ) : (
+                  this.renderFuncs()
+                )
               ) : (
-                ""
+                <div className="pageMessage">Please register a Shop</div>
               )}
             </div>
-            <div className="dropdown-message">
-              {this.state.currentShopName == "select a shop"
-                ? "Welcome Merchant, Please select your shop"
-                : `Your Merchant ID is ${this.state.currentShopId}`}
-            </div>
           </div>
-          <div>
-            {this.props.shops && this.props.shops.shops.length > 0 ? (
-              this.state.currentShopId == "select a shop" ? (
-                ""
-              ) : (
-                this.renderFuncs()
-              )
-            ) : (
-              <div className="pageMessage">Please register a Shop</div>
-            )}
-          </div>
-        </div>
-        <div id="explorer" className="tabcontent">
-          <div className="head-wrapper">
-            <div>
-              {this.props.shops ? (
-                <div className="dropdown-wrapper">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      {this.state.currentShopName}
-                    </Dropdown.Toggle>
+          <div id="explorer" className="tabcontent">
+            <div className="head-wrapper">
+              <div>
+                {this.props.shops ? (
+                  <div className="dropdown-wrapper">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {this.state.currentShopName}
+                      </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      {this.getDropDownOptions(this.props)}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              ) : (
-                ""
-              )}
+                      <Dropdown.Menu>
+                        {this.getDropDownOptions(this.props)}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="dropdown-message">
+                {this.state.currentShopName == "select a shop"
+                  ? "Welcome Merchant, Please select your shop"
+                  : `Your Merchant ID is ${this.state.currentShopId}`}
+              </div>
             </div>
-            <div className="dropdown-message">
-              {this.state.currentShopName == "select a shop"
-                ? "Welcome Merchant, Please select your shop"
-                : `Your Merchant ID is ${this.state.currentShopId}`}
-            </div>
-          </div>
-          <h3>Explorer</h3>
-          <p>
-            Via this explorer the merchant can view payment logs for the
-            selected application.
-          </p>
-          {/* <button onClick={this.getMerchantLogs}>Get the Merchant Logs</button> */}
-          <div>
-            {this.props.shops && this.props.shops.shops.length > 0 ? (
-              this.state.currentShopId === "select a shop" ? (
-                <div>Please select a shop to continue</div>
-              ) : (
-                <div className="tableWrapper">
-                <table className="paymentLogTable">
-                  <tbody>
-                    <tr>
-                      <th>From</th>
-                      <th>TxHash</th>
-                      <th>Total Tokens</th>
-                      <th>Token Burnt</th>
-                      <th>Tokens transfered</th>
-                      <th>Date</th>
-                    </tr>
-                    {this.state.currLogs != null ? (
-                      this.state.currLogs.map((log, index) => {
-                        return (
-                          <tr key={log._id}>
-                            <td>{log.returnArgs.sender}</td>
-                            <td>{log.txHash}</td>
-                            <td>{log.returnArgs.totalValue}</td>
-                            <td>{log.returnArgs.tokenBurnt}</td>
-                            <td>{log.returnArgs.tokenTransfered}</td>
-                            <td>
-                              {new Date(parseFloat(log.logTime)).toString()}
-                            </td>
+            <h3>Explorer</h3>
+            <p>
+              Via this explorer the merchant can view payment logs for the
+              selected application.
+            </p>
+            {/* <button onClick={this.getMerchantLogs}>Get the Merchant Logs</button> */}
+            <div>
+              {this.props.shops && this.props.shops.shops.length > 0 ? (
+                this.state.currentShopId === "select a shop" ? (
+                  <div>Please select a shop to continue</div>
+                ) : (
+                  <div className="tableWrapper">
+                    <table className="paymentLogTable">
+                      <tbody>
+                        <tr>
+                          <th>From</th>
+                          <th>TxHash</th>
+                          <th>Total Tokens</th>
+                          <th>Token Burnt</th>
+                          <th>Tokens transfered</th>
+                          <th>Date</th>
+                        </tr>
+                        {this.state.currLogs != null ? (
+                          this.state.currLogs.map((log, index) => {
+                            return (
+                              <tr key={log._id}>
+                                <td>{log.returnArgs.sender}</td>
+                                <td>{log.txHash}</td>
+                                <td>{log.returnArgs.totalValue}</td>
+                                <td>{log.returnArgs.tokenBurnt}</td>
+                                <td>{log.returnArgs.tokenTransfered}</td>
+                                <td>
+                                  {new Date(parseFloat(log.logTime)).toString()}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td>No Logs to show</td>
                           </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td>No Logs to show</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-                </div>
-              )
-            ) : (
-              <div>Please register a shop</div>
-            )}
-          </div>
-        </div>
-
-        <div id="scripts" className="tabcontent">
-          <div className="head-wrapper">
-            <div>
-              {this.props.shops ? (
-                <div className="dropdown-wrapper">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      {this.state.currentShopName}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      {this.getDropDownOptions(this.props)}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )
               ) : (
-                ""
+                <div>Please register a shop</div>
               )}
             </div>
-            <div className="dropdown-message">
-              {this.state.currentShopName == "select a shop"
-                ? "Welcome Merchant, Please select your shop"
-                : `Your Merchant ID is ${this.state.currentShopId}`}
+          </div>
+
+          <div id="scripts" className="tabcontent">
+            <div className="head-wrapper">
+              <div>
+                {this.props.shops ? (
+                  <div className="dropdown-wrapper">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {this.state.currentShopName}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        {this.getDropDownOptions(this.props)}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="dropdown-message">
+                {this.state.currentShopName == "select a shop"
+                  ? "Welcome Merchant, Please select your shop"
+                  : `Your Merchant ID is ${this.state.currentShopId}`}
+              </div>
+            </div>
+            <div>
+              {this.props.shops && this.props.shops.shops.length > 0 ? (
+                this.state.currentShopId == "select a shop" ? (
+                  ""
+                ) : (
+                  this.renderScripts()
+                )
+              ) : (
+                <div className="pageMessage">Please register a Shop</div>
+              )}
             </div>
           </div>
-          <div>
-            {this.props.shops && this.props.shops.shops.length > 0 ? (
-              this.state.currentShopId == "select a shop" ? (
-                ""
-              ) : (
-                this.renderScripts()
-              )
-            ) : (
-              <div className="pageMessage">Please register a Shop</div>
-            )}
-          </div>
-        </div>
         </div>
       </div>
     );
@@ -766,14 +874,14 @@ function getPercentDecimals(str) {
 
 async function getMerchantLogs(id) {
   console.log("called getMerchantLogs: ", id);
-  try{
+  try {
     const resLogs = await axios.post("/logger/getMerchantPaymentLogs", {
       merchantId: id
     });
     console.log(resLogs);
     return resLogs.data.logs;
-  }catch(e) {
-    console.log("Error at merchant: ",e);
+  } catch (e) {
+    console.log("Error at merchant: ", e);
     store.addNotification({
       title: "Error!",
       message: "Error while making request to the listener",
@@ -786,10 +894,9 @@ async function getMerchantLogs(id) {
         duration: 5000,
         onScreen: true
       }
-    });  
+    });
     return;
   }
-  
 }
 
 export default connect(mapsStateToProps, actions)(MerchantDashboard);

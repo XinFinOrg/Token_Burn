@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.6.0;
+pragma solidity ^0.5.1;
 
 contract Ownable {
     address private _owner;
@@ -136,6 +136,7 @@ contract AcceptToken is Ownable {
         (bool idExists, uint index) = getMerchantFromId(merchantId);
         require(idExists,"MakePayment: so merchant exists");
         Merchant memory currentMerchant = allMerchants[index]; 
+        require(currentMerchant.status==true,"MakePayment: Merchant not active");
         address payable recipient = currentMerchant.owner;
         address payable burnAddr = 0x0000000000000000000000000000000000000000;
         if (currentMerchant.burnActive && currentMerchant.burnPercent > 0){

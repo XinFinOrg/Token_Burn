@@ -2,20 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": {
-    "/api/*": {
-      "target": "http://localhost:3100"
-    },
-    "/logger/*": {
-      "target": "http://localhost:3100"
-    },
-    "/formLogin": {
-      "target": "http://localhost:3100"
-    },
-    "/formRegister": {
-      "target": "http://localhost:3100"
-    }
-  },
   "dependencies": {
     "autoprefixer": "7.1.6",
     "axios": "^0.18.1",
