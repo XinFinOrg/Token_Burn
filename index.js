@@ -1,6 +1,8 @@
 "use strict";
 const express = require("express");
 const mongoose = require("mongoose");
+const XDC3 = require("xdc3");
+const EventLog = require("./models/eventLogs");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
@@ -25,6 +27,9 @@ redisClient.on("error", err => {
 logger.info("[*] Build exists:", fs.existsSync("./client/build"));
 
 const app = express();
+
+app.use("/index",express.static(path.join(__dirname, "./index.html")));
+
 
 if (process.env.ENV == "dev") {
   logger.info("[*] Started the app in DEV mode");
@@ -104,3 +109,131 @@ function connectToMongoDB() {
       setTimeout(connectToMongoDB, 5000);
     });
 }
+
+const blockchainUri =
+  process.env.BLOCKCHAIN_RPC || "http://rpc.apothem.network";
+const xdc3 = new XDC3(new XDC3.providers.HttpProvider(blockchainUri));
+
+const contractConfig = require("./config/config").contractConfig;
+const contractInst = xdc3.eth
+  .contract(contractConfig.acceptToken_abi)
+  .at(contractConfig.acceptToken_addr);
+
+logger.info(`[*] From the XDC3 instance (index.js), owner is: ${contractInst.owner()}`);
+
+const eventContractOwnerChange = contractInst.OwnershipTransferred();
+const eventNewMerchant = contractInst.NewMerchant();
+const eventNewPayment = contractInst.NewPayment();
+const eventOwnershipTransfer = contractInst.MerchantOwnerChanged();
+
+eventContractOwnerChange.watch(async (err, result) => {
+  logger.info("received event at index.eventContractOwnerChange");
+  if (err !== null) {
+    // do error handling
+    logger.error(`error at index.eventContractOwnerChange : ${err.toString()}`);
+  } else {
+    // ok
+    logger.verbose(
+      "successfully received the event at index.eventContractOwnerChange"
+    );
+    const newEvent = EventLog({
+      event: result.event,
+      logTime: Date.now(),
+      returnArgs: result.args,
+      txHash: result.transactionHash,
+      blockHash: result.blockHash,
+      blockNumber: result.blockNumber
+    });
+    try {
+      await newEvent.save();
+      logger.verbose("new event saved to the db");
+    } catch (e) {
+      logger.error(
+        `error while saving the new event instance at index.eventContractOwnerChange: ${e.toString()}`
+      );
+    }
+  }
+});
+
+eventNewMerchant.watch(async (err, result) => {
+  logger.info("received event at index.eventNewMerchant");
+  if (err !== null) {
+    // do error handling
+    logger.error(`error at index.eventNewMerchant : ${err.toString()}`);
+  } else {
+    // ok
+    logger.verbose("successfully received new event at index.eventNewMerchant");
+    const newEvent = EventLog({
+      event: result.event,
+      logTime: Date.now(),
+      returnArgs: result.args,
+      txHash: result.transactionHash,
+      blockHash: result.blockHash,
+      blockNumber: result.blockNumber
+    });
+    try {
+      await newEvent.save();
+      logger.verbose(`new event saved to the db`);
+    } catch (e) {
+      logger.error(
+        `error occured while saving the new event instance at index.eventNewMerchant: ${e.toString()}`
+      );
+    }
+  }
+});
+
+eventNewPayment.watch(async (err, result) => {
+  logger.info("received event at index.eventNewPayment");
+  if (err !== null) {
+    // do error handling
+    logger.error(`error at index.eventNewPayment : ${err.toString()}`);
+  } else {
+    // ok
+    logger.verbose("successfully received new event at index.eventNewPayment");
+    const newEvent = EventLog({
+      event: result.event,
+      logTime: Date.now(),
+      returnArgs: result.args,
+      txHash: result.transactionHash,
+      blockHash: result.blockHash,
+      blockNumber: result.blockNumber
+    });
+    try {
+      await newEvent.save();
+      logger.verbose(`new event saved to the db`);
+    } catch (e) {
+      logger.error(
+        `error occured while saving the new event instance at index.eventNewPayment: ${e.toString()}`
+      );
+    }
+  }
+});
+
+eventOwnershipTransfer.watch(async (err, result) => {
+  logger.info("received event at index.eventOwnershipTransfer");
+  if (err !== null) {
+    // do error handling
+    logger.error(`error at index.eventOwnershipTransfer : ${err.toString()}`);
+  } else {
+    // ok
+    logger.verbose(
+      "successfully received new event at index.eventOwnershipTransfer"
+    );
+    const newEvent = EventLog({
+      event: result.event,
+      logTime: Date.now(),
+      returnArgs: result.args,
+      txHash: result.transactionHash,
+      blockHash: result.blockHash,
+      blockNumber: result.blockNumber
+    });
+    try {
+      await newEvent.save();
+      logger.verbose(`new event saved to the db`);
+    } catch (e) {
+      logger.error(
+        `error occured while saving the new event instance at index.eventOwnershipTransfer: ${e.toString()}`
+      );
+    }
+  }
+});
