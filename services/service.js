@@ -9,6 +9,7 @@ const User = require("../models/merchant");
 const Merchant = require("../models/merchant");
 const EventLog = require("../models/eventLogs");
 const { logger } = require("../services/logger");
+const config = require("../config/config");
 
 if (!fs.existsSync(path.join(__dirname, "../config/keyConfig.js"))) {
   logger.error("Please add keyConfig.js file. Exiting. . . ");
@@ -19,8 +20,10 @@ if (!fs.existsSync(path.join(__dirname, "../config/contractConfig.js"))) {
   process.exit(1);
 }
 
-const keyConfig = require("../config/config").keyConfig;
-const contractConfig = require("../config/config").contractConfig;
+const keyConfig = config.keyConfig;
+const contractConfig = config.contractConfig;
+const networkRpc = config.networkRpc;
+const networkId = config.networkId;
 
 if (
   _.isEmpty(contractConfig.acceptToken_addr) ||
@@ -31,14 +34,12 @@ if (
 }
 
 const errorCode = require("../helpers/errorCode");
-const blockchainUri =
-  process.env.Blockchain_URI || "http://rpc.apothem.network";
 const web3 = new Web3(
-  new Web3.providers.HttpProvider("http://rpc.apothem.network")
+  new Web3.providers.HttpProvider(networkRpc)
 );
 
 const xdc3 = new XDC3(
-  new XDC3.providers.HttpProvider("http://rpc.apothem.network")
+  new XDC3.providers.HttpProvider(networkRpc)
 );
 
 const contractInstWeb3 = new web3.eth.Contract(
@@ -118,7 +119,7 @@ exports.registerNewMerchant = async (req, res) => {
     "0x" + contractConfig.acceptToken_addr.slice(3),
     "0x" + keyConfig.addr.slice(3),
     keyConfig.privateKey,
-    51
+    networkId
   );
   web3.eth
     .sendSignedTransaction(signed.rawTransaction)
@@ -220,7 +221,7 @@ exports.enableMerchant = async (req, res) => {
     "0x" + contractConfig.acceptToken_addr.slice(3),
     "0x" + keyConfig.addr.slice(3),
     keyConfig.privateKey,
-    51
+    networkId
   );
   web3.eth
     .sendSignedTransaction(signed.rawTransaction)
@@ -314,7 +315,7 @@ exports.disableMerchant = async (req, res) => {
     "0x" + contractConfig.acceptToken_addr.slice(3),
     "0x" + keyConfig.addr.slice(3),
     keyConfig.privateKey,
-    51
+    networkId
   );
   web3.eth
     .sendSignedTransaction(signed.rawTransaction)
@@ -478,7 +479,7 @@ function newDefUser() {
 
 async function signAndSendTx(encodedData, toAddr, fromAddr, privKey, chainId) {
   console.log(web3.currentProvider)
-  const estimateGas = await web3.eth.estimateGas({data:encodedData});
+  const estimateGas = await web3.eth.estimateGas({data:encodedData}); // using this throws new error
   const account = web3.eth.accounts.privateKeyToAccount(privKey);
   const rawTx = {
     to: toAddr,

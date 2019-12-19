@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import $ from "jquery";
-import { apothem } from "../config/contractConfig";
+import { apothem } from "../config/contractConfig"; // switch to mainnet for 50
 import { Dropdown } from "react-bootstrap";
 import { store } from "react-notifications-component";
 import { default as _ } from "lodash";

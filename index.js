@@ -12,6 +12,7 @@ const redisClient = redis.createClient({host:process.env.REDIS_HOST || "localhos
 const redisStore = require("connect-redis")(session);
 const path = require("path");
 const fs = require("fs");
+const config = require("./config/config");
 
 const { logger } = require("./services/logger");
 
@@ -110,11 +111,9 @@ function connectToMongoDB() {
     });
 }
 
-const blockchainUri =
-  process.env.BLOCKCHAIN_RPC || "http://rpc.apothem.network";
-const xdc3 = new XDC3(new XDC3.providers.HttpProvider(blockchainUri));
+const xdc3 = new XDC3(new XDC3.providers.HttpProvider(config.networkRpc));
 
-const contractConfig = require("./config/config").contractConfig;
+const contractConfig = config.contractConfig;
 const contractInst = xdc3.eth
   .contract(contractConfig.acceptToken_abi)
   .at(contractConfig.acceptToken_addr);

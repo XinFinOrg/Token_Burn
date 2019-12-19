@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "start-mainnet": "node index.js --network=mainnet",
     "client": "npm run start --prefix client",
     "server": "nodemon index.js",
+    "server-mainnet": "nodemon index.js --network=mainnet",
     "dev": "concurrently \"npm run client\" \"npm run start\""
   },
   "author": "",
