@@ -20,7 +20,7 @@
     "connect-redis": "^4.0.3",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongoose": "^5.7.12",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
